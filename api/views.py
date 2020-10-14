@@ -39,7 +39,7 @@ def init(request):
         User.objects.create(username=username, entity=entity_obj, pin=pin, secOfficer="SYSTEM",
                             creationTime=datetime.datetime.utcnow(), role=RoleTag.ADMIN.value)
 
-        LOG.debug("SO: {} Issuer: {} Operazione eseguita correttamente".format(username, entity))
+        LOG.info("SO: {} Issuer: {} Operazione eseguita correttamente".format(username, entity))
         return JsonResponse({'statusCode': StatusCode.OK.value, 'message': pin})
     except Exception as e:
         LOG.error("Exception: {}".format(str(e)))
@@ -72,7 +72,7 @@ def create(request):
 
         User.objects.create(username=username, secOfficer=admin, pin=pin, creationTime=datetime.datetime.utcnow(),
                             entity=entity_obj)
-        LOG.debug("SO: {} Operator: {} Issuer: {} Operazione eseguita correttamente".format(admin, username, entity))
+        LOG.info("SO: {} Operator: {} Issuer: {} Operazione eseguita correttamente".format(admin, username, entity))
         return JsonResponse({'statusCode': StatusCode.OK.value, 'message': pin})
     except Exception as e:
         LOG.error("Exception: {}".format(str(e)))
@@ -119,11 +119,11 @@ def activate(request):
                     entity_obj.certData = cert
                     entity_obj.status = True
                     entity_obj.save()
-                    LOG.debug("SO: {} Issuer: {} Operazione eseguita correttamente".format(username,
+                    LOG.info("SO: {} Issuer: {} Operazione eseguita correttamente".format(username,
                                                                                            entity))
                     return JsonResponse({'statusCode': StatusCode.OK.value,
                                          'message': 'Operazione eseguita correttamente. Certificato caricato'})
-                LOG.debug("Operator: {} Issuer: {} Operazione eseguita correttamente".format(username,
+                LOG.info("Operator: {} Issuer: {} Operazione eseguita correttamente".format(username,
                                                                                              entity))
                 return JsonResponse({'statusCode': StatusCode.OK.value, 'message': 'Operazione eseguita correttamente'})
             else:
@@ -170,7 +170,7 @@ def sign(request):
             signature = crypto.sign(priv_key, b64_all.encode(), "RSA-SHA256")
             sig = base64.urlsafe_b64encode(signature).decode().rstrip("=")
 
-            LOG.debug(
+            LOG.info(
                 "Operazione eseguita correttamente. Operator: {} Issuer: {} Signed: {}".format(username, entity, sig))
             return JsonResponse(
                 {'statusCode': StatusCode.OK.value, 'cert': base64.b64encode(cert_string).decode(), "alg": ALG_SIGN,
@@ -214,7 +214,7 @@ def reset_pin(request):
         user.pin = pin
         user.lastUpdate = datetime.datetime.utcnow()
         user.save()
-        LOG.debug("SO: {} Operator: {} Issuer: {} Operazione eseguita correttamente".format(admin, username, entity))
+        LOG.info("SO: {} Operator: {} Issuer: {} Operazione eseguita correttamente".format(admin, username, entity))
         return JsonResponse({'statusCode': StatusCode.OK.value, 'message': pin})
     except Exception as e:
         LOG.error("Exception: {}".format(str(e)))
@@ -250,7 +250,7 @@ def deactivate(request):
         user.status = False
         user.lastUpdate = datetime.datetime.utcnow()
         user.save()
-        LOG.debug("SO: {} Operator: {} Issuer: {} Operazione eseguita correttamente".format(admin, username, entity))
+        LOG.info("SO: {} Operator: {} Issuer: {} Operazione eseguita correttamente".format(admin, username, entity))
         return JsonResponse({'statusCode': StatusCode.OK.value, 'message': 'Operazione eseguita correttamente'})
     except Exception as e:
         LOG.error("Exception: {}".format(str(e)))
@@ -282,7 +282,7 @@ def update_cert(request):
             entity_obj.certData = cert
             entity_obj.status = True
             entity_obj.save()
-            LOG.debug("SO: {} Issuer: {} Operazione eseguita correttamente".format(username,
+            LOG.info("SO: {} Issuer: {} Operazione eseguita correttamente".format(username,
                                                                                    entity))
             return JsonResponse({'statusCode': StatusCode.OK.value,
                                  'message': 'Operazione eseguita correttamente. Certificato caricato'})
