@@ -1,4 +1,4 @@
-django==2.2.12
+django==2.2.13
 PyJWT==1.7.1
 PyOpenSSL==19.1.0
 requests==2.24.0
