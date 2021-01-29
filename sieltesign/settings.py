@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(24))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG_ENABLED', True)
 
 ALLOWED_HOSTS = ['*']
 
@@ -74,10 +74,19 @@ WSGI_APPLICATION = 'sieltesign.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': os.environ.get('DATABASE_ENGINE','django.db.backends.sqlite3'),
+        'NAME': os.environ.get('DATABASE_NAME', os.path.join(BASE_DIR, 'db.sqlite3')),
     }
 }
+
+if os.environ.get('DATABASE_USER') is not None:
+    DATABASES['default']['USER'] = os.environ.get('DATABASE_USER')
+
+if os.environ.get('DATABASE_PASSWORD') is not None:
+    DATABASES['default']['PASSWORD'] = os.environ.get('DATABASE_PASSWORD')
+
+if os.environ.get('DATABASE_HOST') is not None:
+    DATABASES['default']['HOST'] = os.environ.get('DATABASE_HOST')
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
