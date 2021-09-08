@@ -2,6 +2,47 @@
 
 Il seguente progetto mette a disposizione dei R.A.O. pubblici uno strumento per firmare le richieste di identificazione SPID.
 
+## Installazione con Docker
+
+Nel caso in cui non sia stato avviato il progetto ``rao-pubblico`` tramite docker-compose, è possibile avviare il progetto seguendo questi passi:
+
+* effettuare il git clone del repository;
+* dalla cartella in cui è stato clonato il repos., avviare il seguente comando per buildare l'immagine:
+
+
+```bash 
+docker build --no-cache -f "./compose/local/sieltesign/Dockerfile" -t  "sieltesign:latest" .
+```
+
+
+* Nel caso di utilizzo dell'immagine con *Docker* si consiglia di creare un *volume* con il comando:
+
+```bash
+docker volume create "<nome_volume>" &> /dev/null || true
+```
+* avviare il seguente comando per avviare un container con l'immagine appena creata:
+
+```bash 
+docker run -d  \
+    --name "sieltesign" \
+    --mount type=volume,source="<nome_volume>",target="/data" \
+    -e 
+    -p "8003:8003" \
+    "sieltesign:latest" "/start"
+```
+
+## Attivazione di un Security Officer
+
+Accedere al container del sieltesign tramite il seguente comando:
+```bash 
+docker exec -it <nome_container> /bin/bash
+```
+
+La chiamata di cui sotto fornirà in output uno statusCode e il PIN temporaneo da utilizzare per l'attivazione dell'amministratore.
+```bash 
+curl -X POST 'http://127.0.0.1:8003/v2/api/init' --form 'username=<CF_SEC_OFFICER>' --form 'entity=<IPA_CODE_ENTE>'
+```
+
 
 ## Utilizzo dell’applicativo
 

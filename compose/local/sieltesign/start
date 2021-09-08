@@ -1,0 +1,5 @@
+#!/bin/sh
+
+python3 ./sieltesign/manage.py makemigrations api
+python3 ./sieltesign/manage.py migrate
+python3 ./sieltesign/manage.py runserver 0.0.0.0:8003

@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'sieltesign.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.environ.get('DATABASE_NAME', './data/db.sqlite3')
     }
 }
 
@@ -118,7 +118,7 @@ LOGGING = {
             'filters': ['version_filter'],
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'debug.log',
+            'filename': './data/debug.log',
             'formatter': 'standard'
         },
         'mail_admins': {
